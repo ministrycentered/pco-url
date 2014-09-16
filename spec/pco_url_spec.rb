@@ -1,7 +1,5 @@
 require "spec_helper"
 
-Apps = %w(accounts services check_ins resources people)
-
 describe PCO::URL do
   describe "defaults" do
     describe "development" do
@@ -9,7 +7,7 @@ describe PCO::URL do
         Rails.env = "development"
       end
 
-      Apps.each do |app|
+      PCO::URL::Applications.map(&:to_s).each do |app|
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("http://#{app.gsub('_','-')}.pco.dev")
         end
@@ -21,7 +19,7 @@ describe PCO::URL do
         Rails.env = "staging"
       end
 
-      Apps.each do |app|
+      PCO::URL::Applications.map(&:to_s).each do |app|
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("https://#{app.gsub('_','-')}-staging.planningcenteronline.com")
         end
@@ -33,7 +31,7 @@ describe PCO::URL do
         Rails.env = "production"
       end
 
-      Apps.each do |app|
+      PCO::URL::Applications.map(&:to_s).each do |app|
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("https://#{app.gsub('_','-')}.planningcenteronline.com")
         end
@@ -45,7 +43,7 @@ describe PCO::URL do
         Rails.env = "test"
       end
 
-      Apps.each do |app|
+      PCO::URL::Applications.map(&:to_s).each do |app|
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("http://#{app.gsub('_','-')}.pco.test")
         end
