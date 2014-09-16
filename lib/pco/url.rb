@@ -3,24 +3,11 @@ require "pco/url/version"
 module PCO
   class URL
     class << self
-      def accounts
-        ENV["ACCOUNTS_URL"] || url_for_app("accounts")
-      end
-
-      def services
-        ENV["SERVICES_URL"] || url_for_app("services")
-      end
-
-      def people
-        ENV["PEOPLE_URL"] || url_for_app("people")
-      end
-
-      def check_ins
-        ENV["CHECK_INS_URL"] || url_for_app("check-ins")
-      end
-
-      def resources
-        ENV["RESOURCES_URL"] || url_for_app("resources")
+      def method_missing(method_name)
+        app_name = method_name.to_s.gsub("_", "-")
+        env_var  = method_name.to_s.upcase + "_URL"
+        # try "CHECK_INS_URL" then url_for_app("check-ins")
+        ENV[env_var] || url_for_app(app_name)
       end
 
       private
