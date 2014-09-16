@@ -4,6 +4,7 @@ module PCO
   class URL
     Applications = [
       :accounts,
+      :avatars,
       :services,
       :check_ins,
       :people,
