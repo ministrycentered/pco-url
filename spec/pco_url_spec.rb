@@ -89,4 +89,12 @@ describe PCO::URL do
       end
     end
   end
+
+  describe 'invalid app names' do
+    it 'raises a helpful error' do
+      expect {
+        PCO::URL.indulgences
+      }.to raise_error(ArgumentError, /indulgences isn't a real app! \(Must be in accounts, people/)
+    end
+  end
 end
