@@ -2,19 +2,23 @@ require "pco/url/version"
 
 module PCO
   class URL
-    Applications = [
-      :accounts,
-      :avatars,
-      :services,
-      :check_ins,
-      :people,
-      :registrations,
-      :resources
-    ]
 
     class << self
+      def applications
+        @applications ||= [
+          :accounts,
+          :avatars,
+          :services,
+          :check_ins,
+          :people,
+          :registrations,
+          :resources
+        ]
+      end
+      attr_writer :applications
+
       def method_missing(method_name)
-        if Applications.include? method_name
+        if applications.include? method_name
           app_name = method_name.to_s.gsub("_", "-")
           env_var  = method_name.to_s.upcase + "_URL"
 
