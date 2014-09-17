@@ -1,5 +1,15 @@
 require "spec_helper"
 
+Applications = [
+  :accounts,
+  :avatars,
+  :services,
+  :check_ins,
+  :people,
+  :registrations,
+  :resources
+]
+
 describe PCO::URL do
   describe "defaults" do
     describe "development" do
@@ -7,7 +17,7 @@ describe PCO::URL do
         Rails.env = "development"
       end
 
-      PCO::URL.applications.map(&:to_s).each do |app|
+      Applications.map(&:to_s).each do |app|
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("http://#{app.gsub('_','-')}.pco.dev")
         end
@@ -19,7 +29,7 @@ describe PCO::URL do
         Rails.env = "staging"
       end
 
-      PCO::URL.applications.map(&:to_s).each do |app|
+      Applications.map(&:to_s).each do |app|
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("https://#{app.gsub('_','-')}-staging.planningcenteronline.com")
         end
@@ -31,7 +41,7 @@ describe PCO::URL do
         Rails.env = "production"
       end
 
-      PCO::URL.applications.map(&:to_s).each do |app|
+      Applications.map(&:to_s).each do |app|
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("https://#{app.gsub('_','-')}.planningcenteronline.com")
         end
@@ -43,7 +53,7 @@ describe PCO::URL do
         Rails.env = "test"
       end
 
-      PCO::URL.applications.map(&:to_s).each do |app|
+      Applications.map(&:to_s).each do |app|
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("http://#{app.gsub('_','-')}.pco.test")
         end
@@ -88,24 +98,4 @@ describe PCO::URL do
     end
   end
 
-  describe "custom applications" do
-    before do
-      Rails.env = "development"
-      ENV["DEPLOY_ENV"] = nil
-    end
-
-    describe "adding an app" do
-      it "adds a URL method for bazinga" do
-        PCO::URL.applications += [:bazinga]
-        expect(PCO::URL.bazinga).to eq("http://bazinga.pco.dev")
-      end
-    end
-
-    describe "removing an app" do
-      it "removes the URL method for accounts" do
-        PCO::URL.applications -= [:accounts]
-        expect{PCO::URL.accounts}.to raise_error(NoMethodError)
-      end
-    end
-  end
 end
