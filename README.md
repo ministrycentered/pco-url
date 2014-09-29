@@ -32,3 +32,18 @@ PCO::URL.accounts
 PCO::URL.services
 # => "https://services-staging.planningcenteronline.com"
 ```
+
+
+You can also specify the path:
+
+
+```ruby
+PCO::URL.accounts("/test")
+# => "https://accounts-test1.planningcenteronline.com/test"
+
+PCO::URL.accounts("test")
+# => "https://accounts-test1.planningcenteronline.com/test"
+
+PCO::URL.accounts("test", "working")
+# => "https://accounts-test1.planningcenteronline.com/test/working"
+```
