@@ -1,15 +1,12 @@
 require "pco/url/version"
+require 'uri'
 
 module PCO
   class URL
 
     class << self
-      def method_missing(method_name)
-        app_name = method_name.to_s.gsub("_", "-")
-        env_var  = method_name.to_s.upcase + "_URL"
-
-        # Try "CHECK_INS_URL" then url_for_app("check-ins")
-        ENV[env_var] || url_for_app(app_name)
+      def method_missing(method_name, *args)
+        url_for_app_with_path(method_name, args.first)
       end
 
       private
@@ -18,7 +15,24 @@ module PCO
         ENV["DEPLOY_ENV"] || Rails.env
       end
 
+      def env_url(app_name)
+        env_var  = app_name.to_s.upcase + "_URL"
+        ENV[env_var]
+      end
+
+      def url_for_app_with_path(app_name, path)
+        if path
+          URI::join(url_for_app(app_name), path).to_s
+        else
+          url_for_app(app_name)
+        end
+      end
+
       def url_for_app(app_name)
+        # Try "CHECK_INS_URL" then url_for_app("check-ins")
+        return env_url(app_name) if env_url(app_name)
+
+        app_name = app_name.to_s.gsub("_", "-")
         case env
         when "production"
           "https://#{app_name}.planningcenteronline.com"

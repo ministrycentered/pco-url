@@ -61,6 +61,22 @@ describe PCO::URL do
     end
   end
 
+  context "with path starting with /" do
+    Applications.map(&:to_s).each do |app|
+      it "has an #{app} URL with path" do
+        expect(PCO::URL.send(app, "/test")).to eq("http://#{app.gsub('_','-')}.pco.test/test")
+      end
+    end
+  end
+
+  context "with path NOT starting with /" do
+    Applications.map(&:to_s).each do |app|
+      it "has an #{app} URL with path" do
+        expect(PCO::URL.send(app, "test")).to eq("http://#{app.gsub('_','-')}.pco.test/test")
+      end
+    end
+  end
+
   describe "overrides" do
     describe "development with accounts URL override" do
       before do
