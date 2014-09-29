@@ -77,6 +77,15 @@ describe PCO::URL do
     end
   end
 
+  context "with multiple path arguments" do
+    Applications.map(&:to_s).each do |app|
+      it "has an #{app} URL with path" do
+        expect(PCO::URL.send(app, "/test/", "test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
+      end
+    end
+  end
+
+
   describe "overrides" do
     describe "development with accounts URL override" do
       before do

@@ -6,7 +6,7 @@ module PCO
 
     class << self
       def method_missing(method_name, *args)
-        url_for_app_with_path(method_name, args.first)
+        url_for_app_with_path(method_name, args)
       end
 
       private
@@ -20,12 +20,8 @@ module PCO
         ENV[env_var]
       end
 
-      def url_for_app_with_path(app_name, path)
-        if path
-          URI::join(url_for_app(app_name), path).to_s
-        else
-          url_for_app(app_name)
-        end
+      def url_for_app_with_path(app_name, paths)
+        URI::join(url_for_app(app_name), *paths).to_s
       end
 
       def url_for_app(app_name)
