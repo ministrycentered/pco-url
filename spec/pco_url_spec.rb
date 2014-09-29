@@ -84,6 +84,7 @@ describe PCO::URL do
         expect(PCO::URL.send(app, "test/", "test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
         expect(PCO::URL.send(app, "test", "/test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
         expect(PCO::URL.send(app, "/test/", "test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
+        expect(PCO::URL.send(app, "/test/test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
       end
     end
   end
