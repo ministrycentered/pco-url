@@ -21,7 +21,9 @@ module PCO
       end
 
       def url_for_app_with_path(app_name, paths)
-        URI::join(url_for_app(app_name), *paths).to_s
+        path = paths.map { |p| p.sub(/\A\/+/, "").sub(/\/+\Z/, "") }.join("/")
+
+        URI::join(url_for_app(app_name), path).to_s
       end
 
       def url_for_app(app_name)

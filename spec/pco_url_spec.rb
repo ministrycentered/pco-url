@@ -80,6 +80,9 @@ describe PCO::URL do
   context "with multiple path arguments" do
     Applications.map(&:to_s).each do |app|
       it "has an #{app} URL with path" do
+        expect(PCO::URL.send(app, "test", "test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
+        expect(PCO::URL.send(app, "test/", "test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
+        expect(PCO::URL.send(app, "test", "/test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
         expect(PCO::URL.send(app, "/test/", "test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
       end
     end

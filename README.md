@@ -44,6 +44,6 @@ PCO::URL.accounts("/test")
 PCO::URL.accounts("test")
 # => "https://accounts-test1.planningcenteronline.com/test"
 
-PCO::URL.accounts("test/", "working")
+PCO::URL.accounts("test", "working")
 # => "https://accounts-test1.planningcenteronline.com/test/working"
 ```
