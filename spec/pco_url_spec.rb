@@ -128,7 +128,7 @@ describe PCO::URL do
   end
 
   describe "encrypted params" do
-    subject { PCO::URL.new("people", nil, "foo=bar", encrypt_query_params: true) }
+    subject { PCO::URL.new(app_name: "people", query: "foo=bar", encrypt_query_params: true) }
 
     before(:all) do
       URLcrypt.key = "superdupersecretsuperdupersecret"

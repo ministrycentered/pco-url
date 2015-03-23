@@ -12,7 +12,7 @@ module PCO
 
       def method_missing(method_name, *args)
         path = args.map { |p| p.sub(/\A\/+/, "").sub(/\/+\Z/, "") }.join("/")
-        new(method_name, path).to_s
+        new(app_name: method_name, path: path).to_s
       end
     end
 
@@ -20,12 +20,12 @@ module PCO
     attr_reader :path
     attr_reader :query
 
-    def initialize(app_name, path = nil, query = nil, options = {})
+    def initialize(app_name:, path: nil, query: nil, encrypt_query_params: false)
       @app_name       = app_name.to_s.gsub("_", "-")
       @path           = path
 
       if query
-        @query = options[:encrypt_query_params] ? URLcrypt.encrypt(query) : query
+        @query = encrypt_query_params ? URLcrypt.encrypt(query) : query
       end
     end
 
