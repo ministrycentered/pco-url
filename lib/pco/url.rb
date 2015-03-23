@@ -1,12 +1,26 @@
 require "pco/url/version"
 require 'uri'
+require 'base64'
 
 module PCO
   class URL
 
+    SALT = 'These_pretzels_are_making_me_thirsty'
+
     class << self
       def method_missing(method_name, *args)
         url_for_app_with_path(method_name, args)
+      end
+
+      def encrypt_params(params)
+        Rack::Utils.escape_path(Base64.encode64(params + "&salt=#{SALT}"))
+      end
+
+      def decrypt_params(encrypted_params)
+        query = Base64.decode64(Rack::Utils.unescape(encrypted_params))
+        parsed = Rack::Utils.parse_query(query)
+        parsed.delete "salt"
+        parsed
       end
 
       private

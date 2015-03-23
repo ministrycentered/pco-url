@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = PCO::URL::VERSION
   spec.authors       = ["James Miller"]
   spec.email         = ["bensie@gmail.com"]
-  spec.summary       = %q{Generate URLs for app PCO apps in all environments}
+  spec.summary       = %q{Generate URLs for PCO apps in all environments}
   spec.homepage      = "https://github.com/ministrycentered/pco-url"
   spec.license       = "MIT"
 
