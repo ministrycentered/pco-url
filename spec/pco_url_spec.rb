@@ -127,4 +127,24 @@ describe PCO::URL do
     end
   end
 
+  describe "encrypted params" do
+    subject { PCO::URL.new("people", nil, "foo=bar", encrypt_query_params: true) }
+
+    before(:all) do
+      URLcrypt.key = "superdupersecretsuperdupersecret"
+    end
+
+    it "encrypts URL parameters" do
+      expect(subject.query).to_not eq("foo=bar")
+    end
+
+    it "encrypts and decrypts URL parameters" do
+      expect(URLcrypt.decrypt(subject.query)).to eq("foo=bar")
+    end
+
+    it "decrypts using #decrypt_query_params" do
+      expect(PCO::URL.decrypt_query_params(subject.query)).to eq("foo=bar")
+    end
+  end
+
 end
