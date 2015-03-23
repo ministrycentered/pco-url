@@ -1,6 +1,6 @@
 require "pco/url/version"
 require "uri"
-require "urlcrypt"
+require "URLcrypt"
 
 module PCO
   class URL
