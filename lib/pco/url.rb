@@ -13,16 +13,14 @@ module PCO
       end
 
       def parse(string)
-        if string.match(%r{https?://(\w+)(-staging)?\.(\w+\.\w+)(/.*)?})
-          app_name = $1
-          if $4
-            path, query = $4.split('?')
-            path = path[1..-1]
-            if query && query.match(/^_e=(.*)/)
-              query = decrypt_query_params($1)
-            end
+        if uri = URI.parse(string)
+          app_name = uri.host.match(/(\w+)(-staging)?/)[1]
+
+          if uri.query && uri.query.match(/^_e=(.*)/)
+            uri.query = decrypt_query_params($1)
           end
-          return self.new(app_name: app_name, path: path, query: query)
+
+          return self.new(app_name: app_name, path: uri.path, query: uri.query)
         else
           raise InvalidPCOURLString, "Unrecognized PCO::URL url string"
         end

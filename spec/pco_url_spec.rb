@@ -175,7 +175,7 @@ describe PCO::URL do
 
       it 'sets the app_name and path attrs' do
         expect(subject.app_name).to eq('people')
-        expect(subject.path).to eq('households/2.json')
+        expect(subject.path).to eq('/households/2.json')
       end
     end
 
@@ -184,7 +184,7 @@ describe PCO::URL do
 
       it 'sets the app_name, path, and query attrs' do
         expect(subject.app_name).to eq('people')
-        expect(subject.path).to eq('households/2.html')
+        expect(subject.path).to eq('/households/2.html')
         expect(subject.query).to eq('full_access=1&staff=1')
       end
 
