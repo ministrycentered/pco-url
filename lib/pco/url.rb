@@ -5,9 +5,25 @@ require "URLcrypt"
 module PCO
   class URL
 
+    class InvalidPCOURLString < StandardError; end
+
     class << self
       def decrypt_query_params(string)
         URLcrypt.decrypt(string)
+      end
+
+      def parse(string)
+        if uri = URI.parse(string)
+          app_name = uri.host.match(/(\w+)(-staging)?/)[1]
+
+          if uri.query && uri.query.match(/^_e=(.*)/)
+            uri.query = decrypt_query_params($1)
+          end
+
+          new(app_name: app_name, path: uri.path, query: uri.query)
+        else
+          raise InvalidPCOURLString, "Unrecognized PCO::URL url string"
+        end
       end
 
       def method_missing(method_name, *args)
@@ -25,7 +41,7 @@ module PCO
       @path           = path
 
       if query
-        @query = encrypt_query_params ? URLcrypt.encrypt(query) : query
+        @query = encrypt_query_params ? "_e=#{URLcrypt.encrypt(query)}" : query
       end
     end
 

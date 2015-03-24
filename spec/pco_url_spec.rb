@@ -138,12 +138,70 @@ describe PCO::URL do
       expect(subject.query).to_not eq("foo=bar")
     end
 
+    it 'puts the encrypted params into the _e key' do
+      expect(subject.query).to match(/^_e=(.*)/)
+    end
+
     it "encrypts and decrypts URL parameters" do
       expect(URLcrypt.decrypt(subject.query)).to eq("foo=bar")
     end
 
     it "decrypts using #decrypt_query_params" do
       expect(PCO::URL.decrypt_query_params(subject.query)).to eq("foo=bar")
+    end
+  end
+
+  describe '.parse' do
+    let(:subject) { PCO::URL.parse("https://people-staging.planningcenteronline.com") }
+
+    before(:all) do
+      URLcrypt.key = "superdupersecretsuperdupersecret"
+    end
+
+    it 'returns a PCO::URL object' do
+      expect(subject.class).to eq(PCO::URL)
+    end
+
+    context 'when only a url string is passed' do
+      let(:subject) { PCO::URL.parse("http://people.pco.dev") }
+
+      it 'sets the app_name attr' do
+        expect(subject.app_name).to eq('people')
+      end
+
+      it 'strips -staging if supplied' do
+        expect(PCO::URL.parse("https://people-staging.plannincenteronline.com").app_name).
+          to eq('people')
+      end
+    end
+
+    context 'when a string and path is passed' do
+      let(:subject) { PCO::URL.parse("https://people.planningcenteronline.com/households/2.json") }
+
+      it 'sets the app_name and path attrs' do
+        expect(subject.app_name).to eq('people')
+        expect(subject.path).to eq('/households/2.json')
+      end
+    end
+
+    context 'when a string, path and query are passed' do
+      let(:subject) { PCO::URL.parse("https://people.planningcenteronline.com/households/2.html?full_access=1&staff=1") }
+
+      it 'sets the app_name, path, and query attrs' do
+        expect(subject.app_name).to eq('people')
+        expect(subject.path).to eq('/households/2.html')
+        expect(subject.query).to eq('full_access=1&staff=1')
+      end
+
+      context 'when the query is encrypted' do
+        let(:pcourl) { PCO::URL.new(app_name: :people, path: 'households/2.html', query: 'full_access=1&staff=1', encrypt_query_params: true) }
+        let(:subject) { PCO::URL.parse(pcourl.to_s) }
+
+        it 'first decrypts the query' do
+          expect(pcourl.query).not_to eq('full_access=1&staff=1')
+          expect(subject.query).to eq('full_access=1&staff=1')
+        end
+      end
     end
   end
 
