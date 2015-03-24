@@ -4,9 +4,6 @@ require "URLcrypt"
 
 module PCO
   class URL
-
-    class InvalidPCOURLString < StandardError; end
-
     class << self
       def decrypt_query_params(string)
         URLcrypt.decrypt(string)
@@ -16,8 +13,13 @@ module PCO
         if uri = URI.parse(string)
           app_name = uri.host.match(/(\w+)(-staging)?/)[1]
 
-          if uri.query && uri.query.match(/^_e=(.*)/)
-            uri.query = decrypt_query_params($1)
+          if uri.query
+            if encrypted_part = encrypted_query_string(uri.query)
+              uri.query = uri.query.gsub("_e=" + encrypted_part, "")
+              uri.query = uri.query[1..-1] if uri.query[0] == "&"
+              uri.query += "&" unless uri.query.empty?
+              uri.query += decrypt_query_params(encrypted_part)
+            end
           end
 
           new(app_name: app_name, path: uri.path, query: uri.query)
@@ -29,6 +31,18 @@ module PCO
       def method_missing(method_name, *args)
         path = args.map { |p| p.sub(/\A\/+/, "").sub(/\/+\Z/, "") }.join("/")
         new(app_name: method_name, path: path).to_s
+      end
+
+      private
+
+      def encrypted_query_string(query_params)
+        if query_params =~ encrypted_params_regex
+          Regexp.last_match(:param)
+        end
+      end
+
+      def encrypted_params_regex
+        /^_e=(?<param>[^\&]*)/
       end
     end
 
@@ -94,4 +108,6 @@ module PCO
       ENV[env_var]
     end
   end
+
+  class InvalidPCOURLString < StandardError; end
 end

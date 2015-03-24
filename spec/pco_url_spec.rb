@@ -7,10 +7,15 @@ Applications = [
   :check_ins,
   :people,
   :registrations,
-  :resources
+  :resources,
+  :giving
 ]
 
 describe PCO::URL do
+  before :all do
+    URLcrypt.key = "984e9002e680dc9b9c2556434c47f7e4782191f52063277901e4a009797652e08f28be069dfb4d4a1e3c9ab09fedab59be2c9b6486748bf44030182815ee4987"
+  end
+
   describe "defaults" do
     describe "development" do
       before do
@@ -130,10 +135,6 @@ describe PCO::URL do
   describe "encrypted params" do
     subject { PCO::URL.new(app_name: "people", query: "foo=bar", encrypt_query_params: true) }
 
-    before(:all) do
-      URLcrypt.key = "superdupersecretsuperdupersecret"
-    end
-
     it "encrypts URL parameters" do
       expect(subject.query).to_not eq("foo=bar")
     end
@@ -143,27 +144,23 @@ describe PCO::URL do
     end
 
     it "encrypts and decrypts URL parameters" do
-      expect(URLcrypt.decrypt(subject.query)).to eq("foo=bar")
+      expect(URLcrypt.decrypt(subject.query.gsub("_e=", ""))).to eq("foo=bar")
     end
 
     it "decrypts using #decrypt_query_params" do
-      expect(PCO::URL.decrypt_query_params(subject.query)).to eq("foo=bar")
+      expect(PCO::URL.decrypt_query_params(subject.query.gsub("_e=", ""))).to eq("foo=bar")
     end
   end
 
   describe '.parse' do
-    let(:subject) { PCO::URL.parse("https://people-staging.planningcenteronline.com") }
-
-    before(:all) do
-      URLcrypt.key = "superdupersecretsuperdupersecret"
-    end
+    subject { PCO::URL.parse("https://people-staging.planningcenteronline.com") }
 
     it 'returns a PCO::URL object' do
       expect(subject.class).to eq(PCO::URL)
     end
 
     context 'when only a url string is passed' do
-      let(:subject) { PCO::URL.parse("http://people.pco.dev") }
+      subject { PCO::URL.parse("http://people.pco.dev") }
 
       it 'sets the app_name attr' do
         expect(subject.app_name).to eq('people')
@@ -176,7 +173,7 @@ describe PCO::URL do
     end
 
     context 'when a string and path is passed' do
-      let(:subject) { PCO::URL.parse("https://people.planningcenteronline.com/households/2.json") }
+      subject { PCO::URL.parse("https://people.planningcenteronline.com/households/2.json") }
 
       it 'sets the app_name and path attrs' do
         expect(subject.app_name).to eq('people')
@@ -185,21 +182,30 @@ describe PCO::URL do
     end
 
     context 'when a string, path and query are passed' do
-      let(:subject) { PCO::URL.parse("https://people.planningcenteronline.com/households/2.html?full_access=1&staff=1") }
+      let(:pco_url) { PCO::URL.new(app_name: :people, path: 'households/2.html', query: 'full_access=1&total_control=1', encrypt_query_params: true) }
+
+      subject { PCO::URL.parse("https://people.planningcenteronline.com/households/2.html?full_access=1&total_control=1") }
 
       it 'sets the app_name, path, and query attrs' do
         expect(subject.app_name).to eq('people')
         expect(subject.path).to eq('/households/2.html')
-        expect(subject.query).to eq('full_access=1&staff=1')
+        expect(subject.query).to eq('full_access=1&total_control=1')
       end
 
       context 'when the query is encrypted' do
-        let(:pcourl) { PCO::URL.new(app_name: :people, path: 'households/2.html', query: 'full_access=1&staff=1', encrypt_query_params: true) }
-        let(:subject) { PCO::URL.parse(pcourl.to_s) }
+        subject { PCO::URL.parse(pco_url.to_s) }
 
         it 'first decrypts the query' do
-          expect(pcourl.query).not_to eq('full_access=1&staff=1')
-          expect(subject.query).to eq('full_access=1&staff=1')
+          expect(pco_url.query).not_to eq('full_access=1&total_control=1')
+          expect(subject.query).to eq('full_access=1&total_control=1')
+        end
+      end
+
+      context "when part of the query string is encrypted" do
+        subject { PCO::URL.parse(pco_url.to_s + "&foo=bar") }
+
+        it "decrypts the encrypted portion and appends the unencrypted portion" do
+          expect(subject.query).to eq('foo=bar&full_access=1&total_control=1')
         end
       end
     end
