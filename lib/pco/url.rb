@@ -15,10 +15,7 @@ module PCO
 
           if uri.query
             if encrypted_part = encrypted_query_string(uri.query)
-              uri.query = uri.query.gsub("_e=" + encrypted_part, "")
-              uri.query = uri.query[1..-1] if uri.query[0] == "&"
-              uri.query += "&" unless uri.query.empty?
-              uri.query += decrypt_query_params(encrypted_part)
+              uri.query.sub!("_e=#{encrypted_part}", decrypt_query_params(encrypted_part))
             end
           end
 

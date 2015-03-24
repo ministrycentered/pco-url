@@ -205,7 +205,7 @@ describe PCO::URL do
         subject { PCO::URL.parse(pco_url.to_s + "&foo=bar") }
 
         it "decrypts the encrypted portion and appends the unencrypted portion" do
-          expect(subject.query).to eq('foo=bar&full_access=1&total_control=1')
+          expect(subject.query).to eq('full_access=1&total_control=1&foo=bar')
         end
       end
     end
