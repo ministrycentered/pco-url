@@ -14,9 +14,15 @@ module PCO
           app_name = uri.host.match(/(\w+)(-staging)?/)[1]
 
           if uri.query
-            if encrypted_part = encrypted_query_string(uri.query)
-              uri.query.sub!("_e=#{encrypted_part}", decrypt_query_params(encrypted_part))
+            params = Hash[uri.query.to_s.split("&").map { |p| p.split("=") }]
+
+            if params["_e"]
+              decrypted_params_string = decrypt_query_params(params.delete("_e"))
+              decrypted_params = Hash[decrypted_params_string.split("&").map { |p| p.split("=") }]
+              params = params.merge(decrypted_params)
             end
+
+            uri.query = URI.encode(params.map{|k,v| "#{k}=#{v}"}.join("&"))
           end
 
           new(app_name: app_name, path: uri.path, query: uri.query)
@@ -28,18 +34,6 @@ module PCO
       def method_missing(method_name, *args)
         path = args.map { |p| p.sub(/\A\/+/, "").sub(/\/+\Z/, "") }.join("/")
         new(app_name: method_name, path: path).to_s
-      end
-
-      private
-
-      def encrypted_query_string(query_params)
-        if query_params =~ encrypted_params_regex
-          Regexp.last_match(:param)
-        end
-      end
-
-      def encrypted_params_regex
-        /^_e=(?<param>[^\&]*)/
       end
     end
 
