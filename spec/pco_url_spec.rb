@@ -163,10 +163,15 @@ describe PCO::URL do
     end
 
     context 'when only a url string is passed' do
-      let(:subject) { PCO::URL.parse("https://people.pco.dev") }
+      let(:subject) { PCO::URL.parse("http://people.pco.dev") }
 
       it 'sets the app_name attr' do
         expect(subject.app_name).to eq('people')
+      end
+
+      it 'strips -staging if supplied' do
+        expect(PCO::URL.parse("https://people-staging.plannincenteronline.com").app_name).
+          to eq('people')
       end
     end
 

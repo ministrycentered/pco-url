@@ -20,7 +20,7 @@ module PCO
             uri.query = decrypt_query_params($1)
           end
 
-          return self.new(app_name: app_name, path: uri.path, query: uri.query)
+          new(app_name: app_name, path: uri.path, query: uri.query)
         else
           raise InvalidPCOURLString, "Unrecognized PCO::URL url string"
         end
