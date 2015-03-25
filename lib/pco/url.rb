@@ -48,8 +48,10 @@ module PCO
     attr_reader :query
 
     def initialize(app_name:, path: nil, query: nil, encrypt_query_params: false)
-      @app_name       = app_name.to_s.gsub("_", "-")
-      @path           = path
+      @app_name = app_name.to_s.gsub("_", "-")
+      @path     = path
+
+      @path = @path[1..-1] if @path && @path[0] == "/"
 
       if query
         @query = encrypt_query_params ? "_e=#{URLcrypt.encrypt(query)}" : query

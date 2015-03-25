@@ -177,7 +177,7 @@ describe PCO::URL do
 
       it 'sets the app_name and path attrs' do
         expect(subject.app_name).to eq('people')
-        expect(subject.path).to eq('/households/2.json')
+        expect(subject.path).to eq('households/2.json')
       end
     end
 
@@ -188,7 +188,7 @@ describe PCO::URL do
 
       it 'sets the app_name, path, and query attrs' do
         expect(subject.app_name).to eq('people')
-        expect(subject.path).to eq('/households/2.html')
+        expect(subject.path).to eq('households/2.html')
         expect(subject.query).to eq('full_access=1&total_control=1')
       end
 
@@ -206,6 +206,10 @@ describe PCO::URL do
 
         it "decrypts the encrypted portion and appends the unencrypted portion" do
           expect(subject.query).to eq('full_access=1&total_control=1&foo=bar')
+        end
+
+        it "returns the full url" do
+          expect(subject.to_s).to eq('https://people-staging.planningcenteronline.com/households/2.html?full_access=1&total_control=1&foo=bar')
         end
       end
     end
