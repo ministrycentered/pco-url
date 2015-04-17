@@ -47,9 +47,10 @@ module PCO
     attr_reader :path
     attr_reader :query
 
-    def initialize(app_name:, path: nil, query: nil, encrypt_query_params: false)
+    def initialize(app_name:, path: nil, query: nil, encrypt_query_params: false, domain: nil)
       @app_name = app_name.to_s.gsub("_", "-")
       @path     = path
+      @domain   = domain
 
       @path = @path[1..-1] if @path && @path[0] == "/"
 
@@ -70,25 +71,34 @@ module PCO
       end
     end
 
+    def domain
+      return @domain if @domain
+
+      case env
+      when "production", "staging"
+        "planningcenteronline.com"
+      when "development"
+        "pco.dev"
+      when "test"
+        "pco.test"
+      end
+    end
+
     def hostname
       # Try "CHECK_INS_URL" then url_for_app("check-ins")
       return env_overridden_hostname.split("://")[1] if env_overridden_hostname
 
       case env
-      when "production"
-        "#{@app_name}.planningcenteronline.com"
       when "staging"
-        "#{@app_name}-staging.planningcenteronline.com"
-      when "development"
-        "#{@app_name}.pco.dev"
-      when "test"
-        "#{@app_name}.pco.test"
+        "#{app_name}-staging.#{domain}"
+      else
+        "#{app_name}.#{domain}"
       end
     end
 
     def uri
-      query = @query ? "?#{@query}" : nil
-      url_string = "#{scheme}://#{hostname}/#{@path}#{query}".sub(/(\/)+$/,'')
+      q = query ? "?#{query}" : nil
+      url_string = "#{scheme}://#{hostname}/#{path}#{q}".sub(/(\/)+$/,'')
       URI(url_string)
     end
 
@@ -103,7 +113,7 @@ module PCO
     end
 
     def env_overridden_hostname
-      env_var = @app_name.to_s.upcase + "_URL"
+      env_var = app_name.to_s.upcase + "_URL"
       ENV[env_var]
     end
   end

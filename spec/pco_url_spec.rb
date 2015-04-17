@@ -66,6 +66,12 @@ describe PCO::URL do
     end
   end
 
+  describe "custom domains" do
+    it "returns a URL with a custom domain" do
+      expect(PCO::URL.new(app_name: "us-east", domain: "pcocdn.com").to_s).to eq("http://us-east.pcocdn.com")
+    end
+  end
+
   context "with path starting with /" do
     Applications.map(&:to_s).each do |app|
       it "has an #{app} URL with path" do
