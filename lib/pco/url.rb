@@ -1,12 +1,11 @@
 require "pco/url/version"
 require "uri"
-require "URLcrypt"
 
 module PCO
   class URL
     class << self
       def decrypt_query_params(string)
-        URLcrypt.decrypt(string)
+        PCO::Encryption.decrypt(string)
       end
 
       def parse(string)
@@ -55,7 +54,7 @@ module PCO
       @path = @path[1..-1] if @path && @path[0] == "/"
 
       if query
-        @query = encrypt_query_params ? "_e=#{URLcrypt.encrypt(query)}" : query
+        @query = encrypt_query_params ? "_e=#{PCO::Encryption.encrypt(query, strategy: StrategyUrlCrypt.new)}" : query
       end
     end
 
