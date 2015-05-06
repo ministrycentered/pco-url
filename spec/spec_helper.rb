@@ -1,5 +1,6 @@
 require "rspec"
 require "pco/url"
+require "pco/encryption"
 
 RSpec.configure do |config|
   config.color = true
