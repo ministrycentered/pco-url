@@ -63,6 +63,8 @@ module PCO
       # Try "CHECK_INS_URL" then url_for_app("check-ins")
       return env_overridden_hostname.split("://")[0] if env_overridden_hostname
 
+      return "http" if app_name == "get"
+
       case env
       when "production", "staging"
         "https"
