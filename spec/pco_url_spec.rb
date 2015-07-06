@@ -8,7 +8,8 @@ Applications = [
   :people,
   :registrations,
   :resources,
-  :giving
+  :giving,
+  :get
 ]
 
 describe PCO::URL do
@@ -35,10 +36,16 @@ describe PCO::URL do
       end
 
       Applications.map(&:to_s).each do |app|
+        next if app == "get"
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("https://#{app.gsub('_','-')}-staging.planningcenteronline.com")
         end
       end
+
+      it "has an http get URL" do
+        expect(PCO::URL.send('get')).to eq("http://get-staging.planningcenteronline.com")
+      end
+
     end
 
     describe "production" do
@@ -47,10 +54,16 @@ describe PCO::URL do
       end
 
       Applications.map(&:to_s).each do |app|
+        next if app == "get"
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("https://#{app.gsub('_','-')}.planningcenteronline.com")
         end
       end
+
+      it "has an http get URL" do
+        expect(PCO::URL.send('get')).to eq("http://get.planningcenteronline.com")
+      end
+
     end
 
     describe "test" do
