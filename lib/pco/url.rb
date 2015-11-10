@@ -1,6 +1,6 @@
-require "pco/url/version"
-require "pco/url/church_center"
-require "pco/url/get"
+require_relative "url/version"
+require_relative "url/church_center"
+require_relative "url/get"
 require "uri"
 require "URLcrypt"
 
