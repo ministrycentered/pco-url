@@ -1,4 +1,6 @@
 require "pco/url/version"
+require "pco/url/church_center"
+require "pco/url/get"
 require "uri"
 require "URLcrypt"
 
@@ -27,7 +29,14 @@ module PCO
 
       def method_missing(method_name, *args)
         path = args.map { |p| p.sub(/\A\/+/, "").sub(/\/+\Z/, "") }.join("/")
-        new(app_name: method_name, path: path).to_s
+        case method_name
+        when :church_center
+          PCO::URL::ChurchCenter.new(path: path).to_s
+        when :get
+          PCO::URL::Get.new(path: path).to_s
+        else
+          new(app_name: method_name, path: path).to_s
+        end
       end
 
       private
@@ -62,8 +71,6 @@ module PCO
     def scheme
       # Try "CHECK_INS_URL" then url_for_app("check-ins")
       return env_overridden_hostname.split("://")[0] if env_overridden_hostname
-
-      return "http" if app_name == "get"
 
       case env
       when "production", "staging"

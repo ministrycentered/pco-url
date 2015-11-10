@@ -28,6 +28,10 @@ describe PCO::URL do
           expect(PCO::URL.send(app)).to eq("http://#{app.gsub('_','-')}.pco.dev")
         end
       end
+
+      it "has a church-center url" do
+        expect(PCO::URL.church_center).to eq("http://churchcenter.dev")
+      end
     end
 
     describe "staging" do
@@ -43,9 +47,12 @@ describe PCO::URL do
       end
 
       it "has an http get URL" do
-        expect(PCO::URL.send('get')).to eq("http://get-staging.planningcenteronline.com")
+        expect(PCO::URL.send("get")).to eq("http://get-staging.planningcenteronline.com")
       end
 
+      it "has a church-center url" do
+        expect(PCO::URL.church_center).to eq("https://staging.churchcenteronline.com")
+      end
     end
 
     describe "production" do
@@ -61,9 +68,12 @@ describe PCO::URL do
       end
 
       it "has an http get URL" do
-        expect(PCO::URL.send('get')).to eq("http://get.planningcenteronline.com")
+        expect(PCO::URL.send("get")).to eq("http://get.planningcenteronline.com")
       end
 
+      it "has a church-center url" do
+        expect(PCO::URL.church_center).to eq("https://churchcenteronline.com")
+      end
     end
 
     describe "test" do
@@ -75,6 +85,10 @@ describe PCO::URL do
         it "has an #{app} URL" do
           expect(PCO::URL.send(app)).to eq("http://#{app.gsub('_','-')}.pco.test")
         end
+      end
+
+      it "has a church-center url" do
+        expect(PCO::URL.church_center).to eq("http://churchcenter.test")
       end
     end
   end
