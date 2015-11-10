@@ -14,6 +14,14 @@ describe PCO::URL::ChurchCenter do
           expect(subject.to_s).to eq("https://foo.churchcenteronline.com")
         end
       end
+
+      context "given no subdomain" do
+        subject { described_class.new }
+
+        it "returns the proper URL" do
+          expect(subject.to_s).to eq("https://churchcenteronline.com")
+        end
+      end
     end
   end
 
@@ -30,6 +38,14 @@ describe PCO::URL::ChurchCenter do
           expect(subject.to_s).to eq("https://foo.staging.churchcenteronline.com")
         end
       end
+
+      context "given no subdomain" do
+        subject { described_class.new }
+
+        it "returns the proper URL" do
+          expect(subject.to_s).to eq("https://staging.churchcenteronline.com")
+        end
+      end
     end
   end
 
@@ -44,6 +60,14 @@ describe PCO::URL::ChurchCenter do
 
         it "returns the proper URL" do
           expect(subject.to_s).to eq("http://foo.churchcenter.dev")
+        end
+      end
+
+      context "given no subdomain" do
+        subject { described_class.new }
+
+        it "returns the proper URL" do
+          expect(subject.to_s).to eq("http://churchcenter.dev")
         end
       end
     end
