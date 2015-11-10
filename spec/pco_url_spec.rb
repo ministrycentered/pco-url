@@ -1,6 +1,6 @@
 require "spec_helper"
 
-Applications = [
+APPLICATIONS = [
   :accounts,
   :avatars,
   :services,
@@ -14,7 +14,8 @@ Applications = [
 
 describe PCO::URL do
   before :all do
-    URLcrypt.key = "984e9002e680dc9b9c2556434c47f7e4782191f52063277901e4a009797652e08f28be069dfb4d4a1e3c9ab09fedab59be2c9b6486748bf44030182815ee4987"
+    URLcrypt.key = "984e9002e680dc9b9c2556434c47f7e4782191f52063277901e4a009797652e0" \
+                   "8f28be069dfb4d4a1e3c9ab09fedab59be2c9b6486748bf44030182815ee4987"
   end
 
   describe "defaults" do
@@ -23,10 +24,14 @@ describe PCO::URL do
         Rails.env = "development"
       end
 
-      Applications.map(&:to_s).each do |app|
+      APPLICATIONS.map(&:to_s).each do |app|
         it "has an #{app} URL" do
-          expect(PCO::URL.send(app)).to eq("http://#{app.gsub('_','-')}.pco.dev")
+          expect(PCO::URL.send(app)).to eq("http://#{app.tr('_', '-')}.pco.dev")
         end
+      end
+
+      it "has a church-center url" do
+        expect(PCO::URL.church_center).to eq("http://churchcenter.dev")
       end
     end
 
@@ -35,17 +40,20 @@ describe PCO::URL do
         Rails.env = "staging"
       end
 
-      Applications.map(&:to_s).each do |app|
+      APPLICATIONS.map(&:to_s).each do |app|
         next if app == "get"
         it "has an #{app} URL" do
-          expect(PCO::URL.send(app)).to eq("https://#{app.gsub('_','-')}-staging.planningcenteronline.com")
+          expect(PCO::URL.send(app)).to eq("https://#{app.tr('_', '-')}-staging.planningcenteronline.com")
         end
       end
 
       it "has an http get URL" do
-        expect(PCO::URL.send('get')).to eq("http://get-staging.planningcenteronline.com")
+        expect(PCO::URL.send("get")).to eq("http://get-staging.planningcenteronline.com")
       end
 
+      it "has a church-center url" do
+        expect(PCO::URL.church_center).to eq("https://staging.churchcenteronline.com")
+      end
     end
 
     describe "production" do
@@ -53,17 +61,20 @@ describe PCO::URL do
         Rails.env = "production"
       end
 
-      Applications.map(&:to_s).each do |app|
+      APPLICATIONS.map(&:to_s).each do |app|
         next if app == "get"
         it "has an #{app} URL" do
-          expect(PCO::URL.send(app)).to eq("https://#{app.gsub('_','-')}.planningcenteronline.com")
+          expect(PCO::URL.send(app)).to eq("https://#{app.tr('_', '-')}.planningcenteronline.com")
         end
       end
 
       it "has an http get URL" do
-        expect(PCO::URL.send('get')).to eq("http://get.planningcenteronline.com")
+        expect(PCO::URL.send("get")).to eq("http://get.planningcenteronline.com")
       end
 
+      it "has a church-center url" do
+        expect(PCO::URL.church_center).to eq("https://churchcenteronline.com")
+      end
     end
 
     describe "test" do
@@ -71,10 +82,14 @@ describe PCO::URL do
         Rails.env = "test"
       end
 
-      Applications.map(&:to_s).each do |app|
+      APPLICATIONS.map(&:to_s).each do |app|
         it "has an #{app} URL" do
-          expect(PCO::URL.send(app)).to eq("http://#{app.gsub('_','-')}.pco.test")
+          expect(PCO::URL.send(app)).to eq("http://#{app.tr('_', '-')}.pco.test")
         end
+      end
+
+      it "has a church-center url" do
+        expect(PCO::URL.church_center).to eq("http://churchcenter.test")
       end
     end
   end
@@ -86,33 +101,32 @@ describe PCO::URL do
   end
 
   context "with path starting with /" do
-    Applications.map(&:to_s).each do |app|
+    APPLICATIONS.map(&:to_s).each do |app|
       it "has an #{app} URL with path" do
-        expect(PCO::URL.send(app, "/test")).to eq("http://#{app.gsub('_','-')}.pco.test/test")
+        expect(PCO::URL.send(app, "/test")).to eq("http://#{app.tr('_', '-')}.pco.test/test")
       end
     end
   end
 
   context "with path NOT starting with /" do
-    Applications.map(&:to_s).each do |app|
+    APPLICATIONS.map(&:to_s).each do |app|
       it "has an #{app} URL with path" do
-        expect(PCO::URL.send(app, "test")).to eq("http://#{app.gsub('_','-')}.pco.test/test")
+        expect(PCO::URL.send(app, "test")).to eq("http://#{app.tr('_', '-')}.pco.test/test")
       end
     end
   end
 
   context "with multiple path arguments" do
-    Applications.map(&:to_s).each do |app|
+    APPLICATIONS.map(&:to_s).each do |app|
       it "has an #{app} URL with path" do
-        expect(PCO::URL.send(app, "test", "test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
-        expect(PCO::URL.send(app, "test/", "test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
-        expect(PCO::URL.send(app, "test", "/test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
-        expect(PCO::URL.send(app, "/test/", "test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
-        expect(PCO::URL.send(app, "/test/test2")).to eq("http://#{app.gsub('_','-')}.pco.test/test/test2")
+        expect(PCO::URL.send(app, "test", "test2")).to   eq("http://#{app.tr('_', '-')}.pco.test/test/test2")
+        expect(PCO::URL.send(app, "test/", "test2")).to  eq("http://#{app.tr('_', '-')}.pco.test/test/test2")
+        expect(PCO::URL.send(app, "test", "/test2")).to  eq("http://#{app.tr('_', '-')}.pco.test/test/test2")
+        expect(PCO::URL.send(app, "/test/", "test2")).to eq("http://#{app.tr('_', '-')}.pco.test/test/test2")
+        expect(PCO::URL.send(app, "/test/test2")).to     eq("http://#{app.tr('_', '-')}.pco.test/test/test2")
       end
     end
   end
-
 
   describe "overrides" do
     describe "development with accounts URL override" do
@@ -158,7 +172,7 @@ describe PCO::URL do
       expect(subject.query).to_not eq("foo=bar")
     end
 
-    it 'puts the encrypted params into the _e key' do
+    it "puts the encrypted params into the _e key" do
       expect(subject.query).to match(/^_e=(.*)/)
     end
 
@@ -171,52 +185,62 @@ describe PCO::URL do
     end
   end
 
-  describe '.parse' do
+  describe ".parse" do
     subject { PCO::URL.parse("https://people-staging.planningcenteronline.com") }
 
-    it 'returns a PCO::URL object' do
+    it "returns a PCO::URL object" do
       expect(subject.class).to eq(PCO::URL)
     end
 
-    context 'when only a url string is passed' do
+    context "when only a url string is passed" do
       subject { PCO::URL.parse("http://people.pco.dev") }
 
-      it 'sets the app_name attr' do
-        expect(subject.app_name).to eq('people')
+      it "sets the app_name attr" do
+        expect(subject.app_name).to eq("people")
       end
 
-      it 'strips -staging if supplied' do
-        expect(PCO::URL.parse("https://people-staging.plannincenteronline.com").app_name).
-          to eq('people')
+      it "strips -staging if supplied" do
+        expect(PCO::URL.parse("https://people-staging.plannincenteronline.com").app_name).to eq("people")
       end
     end
 
-    context 'when a string and path is passed' do
+    context "when a string and path is passed" do
       subject { PCO::URL.parse("https://people.planningcenteronline.com/households/2.json") }
 
-      it 'sets the app_name and path attrs' do
-        expect(subject.app_name).to eq('people')
-        expect(subject.path).to eq('households/2.json')
+      it "sets the app_name and path attrs" do
+        expect(subject.app_name).to eq("people")
+        expect(subject.path).to eq("households/2.json")
       end
     end
 
-    context 'when a string, path and query are passed' do
-      let(:pco_url) { PCO::URL.new(app_name: :people, path: 'households/2.html', query: 'full_access=1&total_control=1', encrypt_query_params: true) }
-
-      subject { PCO::URL.parse("https://people.planningcenteronline.com/households/2.html?full_access=1&total_control=1") }
-
-      it 'sets the app_name, path, and query attrs' do
-        expect(subject.app_name).to eq('people')
-        expect(subject.path).to eq('households/2.html')
-        expect(subject.query).to eq('full_access=1&total_control=1')
+    context "when a string, path and query are passed" do
+      let(:pco_url) do
+        PCO::URL.new(
+          app_name: :people,
+          path: "households/2.html",
+          query: "full_access=1&total_control=1",
+          encrypt_query_params: true
+        )
       end
 
-      context 'when the query is encrypted' do
+      subject do
+        PCO::URL.parse(
+          "https://people.planningcenteronline.com/households/2.html?full_access=1&total_control=1"
+        )
+      end
+
+      it "sets the app_name, path, and query attrs" do
+        expect(subject.app_name).to eq("people")
+        expect(subject.path).to eq("households/2.html")
+        expect(subject.query).to eq("full_access=1&total_control=1")
+      end
+
+      context "when the query is encrypted" do
         subject { PCO::URL.parse(pco_url.to_s) }
 
-        it 'first decrypts the query' do
-          expect(pco_url.query).not_to eq('full_access=1&total_control=1')
-          expect(subject.query).to eq('full_access=1&total_control=1')
+        it "first decrypts the query" do
+          expect(pco_url.query).not_to eq("full_access=1&total_control=1")
+          expect(subject.query).to eq("full_access=1&total_control=1")
         end
       end
 
@@ -224,14 +248,15 @@ describe PCO::URL do
         subject { PCO::URL.parse(pco_url.to_s + "&foo=bar") }
 
         it "decrypts the encrypted portion and appends the unencrypted portion" do
-          expect(subject.query).to eq('full_access=1&total_control=1&foo=bar')
+          expect(subject.query).to eq("full_access=1&total_control=1&foo=bar")
         end
 
         it "returns the full url" do
-          expect(subject.to_s).to eq('https://people-staging.planningcenteronline.com/households/2.html?full_access=1&total_control=1&foo=bar')
+          expect(subject.to_s).to eq(
+            "https://people-staging.planningcenteronline.com/households/2.html?full_access=1&total_control=1&foo=bar"
+          )
         end
       end
     end
   end
-
 end
