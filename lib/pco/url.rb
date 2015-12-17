@@ -46,7 +46,7 @@ module PCO
       end
 
       def encrypted_params_regex
-        /^_e=(?<param>[^\&]*)/
+        /\b_e=(?<param>[^\&]*)/
       end
     end
 

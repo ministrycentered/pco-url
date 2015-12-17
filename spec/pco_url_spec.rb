@@ -257,6 +257,22 @@ describe PCO::URL do
           )
         end
       end
+
+      context "when the encrypted part of the query string is not first" do
+        let(:url) { pco_url.to_s.sub(/\?(_e=.+)/, "?foo=bar&\\1") }
+
+        subject { PCO::URL.parse(url) }
+
+        it "decrypts the encrypted portion and includes the unencrypted portion" do
+          expect(subject.query).to eq("foo=bar&full_access=1&total_control=1")
+        end
+
+        it "returns the full url" do
+          expect(subject.to_s).to eq(
+            "https://people-staging.planningcenteronline.com/households/2.html?foo=bar&full_access=1&total_control=1"
+          )
+        end
+      end
     end
   end
 end
