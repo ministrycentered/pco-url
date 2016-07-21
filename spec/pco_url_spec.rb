@@ -274,5 +274,17 @@ describe PCO::URL do
         end
       end
     end
+
+    context "when a string containing multibyte characters is passed" do
+      let(:url) { "https://people.planningcenteronline.com/person_editor/people/new?person[name]=Debora%20B\xC3\xB6lsterli" }
+
+      subject { PCO::URL.parse(url) }
+
+      it "parses the URL" do
+        expect(subject.to_s).to eq(
+          'https://people-staging.planningcenteronline.com/person_editor/people/new?person[name]=Debora%2520B%C3%B6lsterli'
+        )
+      end
+    end
   end
 end

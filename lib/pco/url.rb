@@ -12,7 +12,7 @@ module PCO
       end
 
       def parse(string)
-        if (uri = URI.parse(string))
+        if (uri = URI.parse(normalize_url_string(string)))
           app_name = uri.host.match(/(\w+)(-staging)?/)[1]
 
           if uri.query
@@ -40,6 +40,12 @@ module PCO
       end
 
       private
+
+      # this handles improperly encoded utf-8 characters
+      def normalize_url_string(url_string)
+        url_string, *anchor = url_string.rpartition('#') if url_string.include?('#')
+        URI.encode(url_string) + Array(anchor).join
+      end
 
       def encrypted_query_string(query_params)
         Regexp.last_match(:param) if query_params =~ encrypted_params_regex
