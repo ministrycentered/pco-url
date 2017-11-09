@@ -16,7 +16,7 @@ module PCO
         return @domain if @domain
         case env
         when "production", "staging"
-          "churchcenteronline.com"
+          "churchcenter.com"
         when "development"
           "churchcenter.dev"
         when "test"
