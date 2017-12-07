@@ -59,7 +59,7 @@ describe PCO::URL::ChurchCenter do
         subject { described_class.new(subdomain: "foo") }
 
         it "returns the proper URL" do
-          expect(subject.to_s).to eq("http://foo.churchcenter.dev")
+          expect(subject.to_s).to eq("http://foo.churchcenter.test")
         end
       end
 
@@ -67,7 +67,7 @@ describe PCO::URL::ChurchCenter do
         subject { described_class.new }
 
         it "returns the proper URL" do
-          expect(subject.to_s).to eq("http://churchcenter.dev")
+          expect(subject.to_s).to eq("http://churchcenter.test")
         end
       end
     end

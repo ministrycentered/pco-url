@@ -26,12 +26,12 @@ describe PCO::URL do
 
       APPLICATIONS.map(&:to_s).each do |app|
         it "has an #{app} URL" do
-          expect(PCO::URL.send(app)).to eq("http://#{app.tr('_', '-')}.pco.dev")
+          expect(PCO::URL.send(app)).to eq("http://#{app.tr('_', '-')}.pco.test")
         end
       end
 
       it "has a church-center url" do
-        expect(PCO::URL.church_center).to eq("http://churchcenter.dev")
+        expect(PCO::URL.church_center).to eq("http://churchcenter.test")
       end
     end
 
@@ -193,7 +193,7 @@ describe PCO::URL do
     end
 
     context "when only a url string is passed" do
-      subject { PCO::URL.parse("http://people.pco.dev") }
+      subject { PCO::URL.parse("http://people.pco.test") }
 
       it "sets the app_name attr" do
         expect(subject.app_name).to eq("people")
