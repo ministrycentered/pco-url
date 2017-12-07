@@ -1,3 +1,7 @@
+# 1.8.0
+
+* Chore: Update URL for churchcenter.com
+
 # 1.7.1
 
 * Fix: Allow `_e` encrypted param to be accompanied by unencrypted params [Geo Lessel]
