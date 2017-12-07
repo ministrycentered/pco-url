@@ -84,9 +84,7 @@ module PCO
       case env
       when "production", "staging"
         "planningcenteronline.com"
-      when "development"
-        "pco.dev"
-      when "test"
+      when "development", "test"
         "pco.test"
       end
     end

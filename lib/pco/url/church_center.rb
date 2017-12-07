@@ -17,9 +17,7 @@ module PCO
         case env
         when "production", "staging"
           "churchcenter.com"
-        when "development"
-          "churchcenter.dev"
-        when "test"
+        when "development", "test"
           "churchcenter.test"
         end
       end
