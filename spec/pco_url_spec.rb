@@ -52,7 +52,7 @@ describe PCO::URL do
       end
 
       it "has a church-center url" do
-        expect(PCO::URL.church_center).to eq("https://staging.churchcenteronline.com")
+        expect(PCO::URL.church_center).to eq("https://staging.churchcenter.com")
       end
     end
 
@@ -73,7 +73,7 @@ describe PCO::URL do
       end
 
       it "has a church-center url" do
-        expect(PCO::URL.church_center).to eq("https://churchcenteronline.com")
+        expect(PCO::URL.church_center).to eq("https://churchcenter.com")
       end
     end
 
