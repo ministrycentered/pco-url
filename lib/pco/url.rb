@@ -1,8 +1,8 @@
 require_relative "url/version"
 require_relative "url/church_center"
 require_relative "url/get"
+require_relative "url/encryption"
 require "uri"
-require "URLcrypt"
 
 module PCO
   class URL
