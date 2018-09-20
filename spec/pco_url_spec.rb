@@ -14,8 +14,12 @@ APPLICATIONS = [
 
 describe PCO::URL do
   before :all do
-    URLcrypt.key = "984e9002e680dc9b9c2556434c47f7e4782191f52063277901e4a009797652e0" \
-                   "8f28be069dfb4d4a1e3c9ab09fedab59be2c9b6486748bf44030182815ee4987"
+    PCO::URL::Encryption.default_key = "984e9002e680dc9b9c2556434c47f7e4782191f52063277901e4a009797652e0" \
+                                       "8f28be069dfb4d4a1e3c9ab09fedab59be2c9b6486748bf44030182815ee4987"
+  end
+
+  after :all do
+    reset_encryption_default_key
   end
 
   describe "defaults" do
@@ -177,7 +181,7 @@ describe PCO::URL do
     end
 
     it "encrypts and decrypts URL parameters" do
-      expect(URLcrypt.decrypt(subject.query.gsub("_e=", ""))).to eq("foo=bar")
+      expect(PCO::URL::Encryption.decrypt(subject.query.gsub("_e=", ""))).to eq("foo=bar")
     end
 
     it "decrypts using #decrypt_query_params" do

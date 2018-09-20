@@ -6,9 +6,7 @@ describe PCO::URL::Encryption do
   TEST_SPECIFIC_KEY = "A\xA0\xBA\x9FX\xD1\x82\xED\xDB\xD5cx|[\xB3\xE6i\xE7\xA3R\xAF(\xFC\xA4?\xC6\xC3\x7F\xEAu\x90u".freeze
   # rubocop:enable Metrics/LineLength
 
-  after do
-    described_class.remove_instance_variable(:@default_key) if described_class.instance_variable_defined?(:@default_key)
-  end
+  after { reset_encryption_default_key }
 
   it "gets mad if you try to change the default key" do
     described_class.default_key = "key!"
