@@ -14,8 +14,8 @@ APPLICATIONS = [
 
 describe PCO::URL do
   before :all do
-    PCO::URL::Encryption.default_key = "984e9002e680dc9b9c2556434c47f7e4782191f52063277901e4a009797652e0" \
-                                       "8f28be069dfb4d4a1e3c9ab09fedab59be2c9b6486748bf44030182815ee4987"
+    PCO::URL::Encryption.default_key =
+      "\xF7\xFE\x99I\x1EkO\xD4\xD3\v\x96\x8A\b\x17\xD8m\x01jr\x8F\xA0L.\xB3\xF3\x12\xD7c\x16\xA8\xD0."
   end
 
   after :all do
