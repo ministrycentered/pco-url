@@ -1,3 +1,7 @@
+# master (unreleased)
+
+* Chore: inline URLcrypt for threadsafety
+
 # 1.9.0
 
 * Chore: Update URL for local dev to use pco.test and churchcenter.test
