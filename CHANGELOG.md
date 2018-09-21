@@ -1,4 +1,4 @@
-# master (unreleased)
+# v2.0.0 (2018-09-21)
 
 * Chore: inline URLcrypt for threadsafety
 
