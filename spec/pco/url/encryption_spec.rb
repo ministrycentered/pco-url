@@ -54,4 +54,69 @@ describe PCO::URL::Encryption do
       expect(described_class.decrypt(encrypted, key: TEST_SPECIFIC_KEY)).to eq("Do the funky Spiderman")
     end
   end
+
+  context "the original URLcrypt tests" do
+    def private_encode(plain)
+      described_class.send(:encode, plain)
+    end
+
+    def private_decode(encded)
+      described_class.send(:decode, encded)
+    end
+
+    def expect_bytes_equal(string1, string2)
+      bytes1 = string1.bytes.to_a.join(":")
+      bytes2 = string2.bytes.to_a.join(":")
+      expect(bytes1).to eq(bytes2)
+    end
+
+    def expect_decoding(encoded, plain)
+      expect_bytes_equal(plain, private_decode(encoded))
+    end
+
+    def expect_encoding(encoded, plain)
+      expect_bytes_equal(encoded, private_encode(plain))
+    end
+
+    it "test empty string" do
+      expect_encoding("", "")
+      expect_decoding("", "")
+    end
+
+    it "encodes and decodes properly" do
+      encoded = "111gc86f4nxw5zj1b3qmhpb14n5h25l4m7111"
+      plain = "\0\0awesome \n ü string\0\0"
+
+      expect_encoding(encoded, plain)
+      expect_decoding(encoded, plain)
+    end
+
+    it "test invalid decoding" do
+      expect_decoding("ZZZZZ", "")
+    end
+
+    it "test arbitrary byte strings" do
+      0.step(1500, 17) do |n|
+        original = (0..n).map { rand(256).chr }.join
+        encoded = private_encode(original)
+        expect_decoding(encoded, original)
+      end
+    end
+
+    it "test encryption" do
+      described_class.default_key =
+        "I\x12 \xC8=\xC5\xE6\xB8fJq\xAF\x15\xF37\b\x7F\"\xDB\xCFMzf\xD5\xA3\xD3)\xBA2\xF9F\x03"
+
+      original  = "hello world!"
+      encrypted = described_class.encrypt(original)
+      expect(described_class.decrypt(encrypted)).to eq(original)
+    end
+
+    it "test decrypt error" do
+      described_class.default_key = "some key"
+      expect { described_class.decrypt("just some plaintext") }
+        .to raise_error(described_class::DecryptError)
+        .with_message("not a valid string to decrypt")
+    end
+  end
 end
