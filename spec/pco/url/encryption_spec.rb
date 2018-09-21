@@ -2,8 +2,8 @@ require "spec_helper"
 
 describe PCO::URL::Encryption do
   # rubocop:disable Metrics/LineLength
-  TEST_DEFAULT_KEY = "\x8Bh\xFAsQ\xF9\xE0u]W#Al8\xC5\xF7\x19\x006+\xF8\xD08i\x12,\xE6X4pna".freeze
-  TEST_SPECIFIC_KEY = "-u\x9F\x15g\xA8j`C\x0F\x1D\xE2\xC5\xEF\x90\xA2\x14\xBF\xFE\xF8\x83T\x13\xE1\xC7\xE3N\x8F1v\x8C\xEC".freeze
+  TEST_DEFAULT_KEY = "b01b94f55e543afee167392ea43f8245".freeze
+  TEST_SPECIFIC_KEY = "97f44346e1cfa9f5fc19463fd182c495".freeze
   # rubocop:enable Metrics/LineLength
 
   after { reset_encryption_default_key }
@@ -26,7 +26,7 @@ describe PCO::URL::Encryption do
 
       it "decrypts correctly" do
         described_class.default_key = TEST_DEFAULT_KEY
-        encrypted = "8zptAtk2wfnsvbsA6k985s82h3Z882hrk2Aw7l5lmtpdryk80rgdm"
+        encrypted = "gktp1A49k6kmbz7ktfwrzwlmc2Zn8t95d4lq9bc62mr252d0542k1"
 
         expect(described_class.decrypt(encrypted)).to eq("Horseman")
       end
@@ -49,7 +49,7 @@ describe PCO::URL::Encryption do
     end
 
     it "decrypts correctly" do
-      encrypted = "xps9AA7wdqdz50Axh79rb5rmzyZy48qy32v9jds0tkA6mhtn0wxs4sbg3y03l4wwnq6gf79tsk530pq"
+      encrypted = "lbklbyhw9pkgs3mqtc5p000xz1Zqrdrkf1f3phmhvzfksgg2Aqdg78kngpv3r5zz1fll6z5cvn96j11"
 
       expect(described_class.decrypt(encrypted, key: TEST_SPECIFIC_KEY)).to eq("Do the funky Spiderman")
     end
@@ -104,8 +104,7 @@ describe PCO::URL::Encryption do
     end
 
     it "test encryption" do
-      described_class.default_key =
-        "I\x12 \xC8=\xC5\xE6\xB8fJq\xAF\x15\xF37\b\x7F\"\xDB\xCFMzf\xD5\xA3\xD3)\xBA2\xF9F\x03"
+      described_class.default_key = "3c3ff314c12b786da43a50b571c0aedc"
 
       original  = "hello world!"
       encrypted = described_class.encrypt(original)
