@@ -1,4 +1,5 @@
 require_relative "url/version"
+require_relative "url/avatars"
 require_relative "url/church_center"
 require_relative "url/get"
 require_relative "url/encryption"
@@ -30,6 +31,8 @@ module PCO
       def method_missing(method_name, *args)
         path = args.map { |p| p.sub(%r{\A/+}, "").sub(%r{/+\Z}, "") }.join("/")
         case method_name
+        when :avatars
+          PCO::URL::Avatars.new(path: path).to_s
         when :church_center
           PCO::URL::ChurchCenter.new(path: path).to_s
         when :get

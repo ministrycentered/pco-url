@@ -2,7 +2,6 @@ require "spec_helper"
 
 APPLICATIONS = [
   :accounts,
-  :avatars,
   :services,
   :check_ins,
   :people,
@@ -37,6 +36,10 @@ describe PCO::URL do
       it "has a church-center url" do
         expect(PCO::URL.church_center).to eq("http://churchcenter.test")
       end
+
+      it "has an avatars url" do
+        expect(PCO::URL.avatars).to eq("http://avatars.pco.test")
+      end
     end
 
     describe "staging" do
@@ -57,6 +60,10 @@ describe PCO::URL do
 
       it "has a church-center url" do
         expect(PCO::URL.church_center).to eq("https://staging.churchcenter.com")
+      end
+
+      it "uses production for avatars because staging does not exist" do
+        expect(PCO::URL.avatars).to eq("https://avatars.planningcenteronline.com")
       end
     end
 
@@ -79,6 +86,10 @@ describe PCO::URL do
       it "has a church-center url" do
         expect(PCO::URL.church_center).to eq("https://churchcenter.com")
       end
+
+      it "has an avatars url" do
+        expect(PCO::URL.avatars).to eq("https://avatars.planningcenteronline.com")
+      end
     end
 
     describe "test" do
@@ -94,6 +105,10 @@ describe PCO::URL do
 
       it "has a church-center url" do
         expect(PCO::URL.church_center).to eq("http://churchcenter.test")
+      end
+
+      it "has an avatars url" do
+        expect(PCO::URL.avatars).to eq("http://avatars.pco.test")
       end
     end
   end
