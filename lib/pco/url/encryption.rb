@@ -93,7 +93,7 @@ module PCO
 
         def case_corrected(data)
           return data unless data[26] == "z"
-          data.tr("a", "A").gsub(/([#{TABLE}]{26})z/, '\1Z')
+          data.tr("a", "A").sub(/\A([#{TABLE}]{26})z/, '\1Z')
         end
 
         def chunks(str, size)
