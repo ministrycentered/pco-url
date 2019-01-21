@@ -1,3 +1,7 @@
+# v2.0.1 (2013-01-21)
+
+* Fix: Repair downcased encrypted params
+
 # v2.0.0 (2018-09-21)
 
 * Chore: inline URLcrypt for threadsafety
