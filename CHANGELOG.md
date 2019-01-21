@@ -1,3 +1,7 @@
+# v2.0.2 (2013-01-21)
+
+* Fix: Repair downcased encrypted params even better
+
 # v2.0.1 (2013-01-21)
 
 * Fix: Repair downcased encrypted params
