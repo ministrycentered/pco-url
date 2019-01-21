@@ -75,7 +75,7 @@ module PCO
 
         def decrypt(data, key: @default_key)
           raise MissingKeyError, "default key or key: argument must be set" if key.nil?
-          iv, encrypted = data.split("Z").map { |part| decode(part) }
+          iv, encrypted = case_corrected(data).split("Z").map { |part| decode(part) }
           raise DecryptError, "not a valid string to decrypt" unless iv && encrypted
           decrypter = cipher(:decrypt, key: key)
           decrypter.iv = iv
@@ -90,6 +90,11 @@ module PCO
         end
 
         private
+
+        def case_corrected(data)
+          return data unless data[26] == "z"
+          data.tr("a", "A").gsub(/([#{TABLE}]{26})z/, '\1Z')
+        end
 
         def chunks(str, size)
           result = []
