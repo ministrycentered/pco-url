@@ -30,6 +30,16 @@ describe PCO::URL::Encryption do
 
         expect(described_class.decrypt(encrypted)).to eq("Horseman")
       end
+
+      context "when the encrypted string gets downcased for some dumb reason" do
+        it "decrypts correctly" do
+          described_class.default_key = TEST_DEFAULT_KEY
+          encrypted = described_class.encrypt("Butterscotch").downcase
+          decrypted = described_class.decrypt(encrypted)
+
+          expect(decrypted).to eq("Butterscotch")
+        end
+      end
     end
 
     context "when no default key is set" do
