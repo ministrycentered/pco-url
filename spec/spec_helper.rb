@@ -1,4 +1,5 @@
 require "rspec"
+require "rails"
 require "pco/url"
 
 RSpec.configure do |config|
@@ -9,11 +10,5 @@ RSpec.configure do |config|
   def reset_encryption_default_key
     return unless PCO::URL::Encryption.instance_variable_defined?(:@default_key)
     PCO::URL::Encryption.remove_instance_variable(:@default_key)
-  end
-end
-
-class Rails
-  class << self
-    attr_accessor :env
   end
 end
