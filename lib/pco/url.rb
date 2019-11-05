@@ -2,6 +2,7 @@ require_relative "url/version"
 require_relative "url/church_center"
 require_relative "url/get"
 require_relative "url/encryption"
+require_relative "url/engine"
 require "uri"
 
 module PCO
@@ -85,7 +86,7 @@ module PCO
       when "production", "staging"
         "planningcenteronline.com"
       when "development", "test"
-        "pco.test"
+        PCO::URL::Engine.domain || "pco.test"
       end
     end
 
