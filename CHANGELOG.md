@@ -1,4 +1,8 @@
-# v2.0.2 (2013-01-21)
+# v2.1.0 (2019-11-05)
+
+* Feature: Add support in dev for any TLD [Tim Morgan]
+
+# v2.0.2 (2019-01-21)
 
 * Fix: Repair downcased encrypted params even better
 
