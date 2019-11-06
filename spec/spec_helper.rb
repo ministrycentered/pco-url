@@ -1,5 +1,8 @@
-require "rspec"
 require "rails"
+require File.expand_path("dummy/config/application", __dir__)
+
+require "rspec"
+require "rspec/rails"
 require "pco/url"
 
 RSpec.configure do |config|
