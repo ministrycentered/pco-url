@@ -1,5 +1,7 @@
 # PCO::URL
 
+[![CircleCI](https://circleci.com/gh/ministrycentered/pco-url.svg?style=svg)](https://circleci.com/gh/ministrycentered/pco-url)
+
 Fetch the base URL for the current and other applications based on the current application environment.
 
 ## Usage
