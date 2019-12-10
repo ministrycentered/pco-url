@@ -1,3 +1,8 @@
+# v2.1.1 (2019-12-10)
+
+* Chore: A bunch of maintenance [Shane Bonham]
+* Fix: `NameError` raised by `aci_delete_org` [Shane Bonham]
+
 # v2.1.0 (2019-11-05)
 
 * Feature: Add support in dev for any TLD [Tim Morgan]
