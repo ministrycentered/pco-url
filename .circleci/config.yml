@@ -1,4 +1,19 @@
 version: 2
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build
 jobs:
   build:
     docker:
@@ -9,27 +24,22 @@ jobs:
           BUNDLE_PATH: vendor/bundle
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - pco-url-bundle-v2-{{ checksum ".ruby-version" }}-{{ checksum "pco-url.gemspec" }}-{{ checksum "Appraisals" }}
             - pco-url-bundle-v2-{{ checksum ".ruby-version" }}-{{ checksum "pco-url.gemspec" }}
             - pco-url-bundle-v2-{{ checksum ".ruby-version" }}-
             - pco-url-bundle-v2-
-
       - run:
           name: Bundle Install
           command: bundle check || bundle install
-
       - run:
           name: Install appraisal dependencies
           command: bundle exec appraisal bundle check || bundle exec appraisal bundle install
-
       - save_cache:
           key: pco-url-bundle-v2-{{ checksum ".ruby-version" }}-{{ checksum "pco-url.gemspec" }}-{{ checksum "Appraisals" }}
           paths:
             - vendor/bundle
-
       - run:
           name: Run rspec
           command: bundle exec appraisal rspec --format progress
