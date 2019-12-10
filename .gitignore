@@ -13,3 +13,4 @@
 *.a
 mkmf.log
 log
+gemfiles/*.gemfile.lock
