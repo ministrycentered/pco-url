@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require_relative "./boot"
 require "action_controller/railtie"
 
-require 'pco/url'
+require "pco/url"
 
 module Dummy
   class Application < Rails::Application

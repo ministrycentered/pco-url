@@ -1,14 +1,15 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+# frozen_string_literal: true
+
+lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'pco/url/version'
+require "pco/url/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "pco-url"
   spec.version       = PCO::URL::VERSION
   spec.authors       = ["James Miller"]
   spec.email         = ["bensie@gmail.com"]
-  spec.summary       = %q{Generate URLs for PCO apps in all environments}
+  spec.summary       = "Generate URLs for PCO apps in all environments"
   spec.homepage      = "https://github.com/ministrycentered/pco-url"
   spec.license       = "MIT"
 
