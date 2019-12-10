@@ -1,3 +1,5 @@
+require "rails/engine"
+
 module PCO
   class URL
     class Engine < Rails::Engine
