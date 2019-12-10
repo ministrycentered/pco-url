@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require "rails/engine"
+
 module PCO
   class URL
     class Engine < Rails::Engine
