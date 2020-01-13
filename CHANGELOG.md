@@ -1,3 +1,7 @@
+# v2.1.2 (2020-01-13)
+
+* Fix: Always use pco.test in test environment [Tim Morgan]
+
 # v2.1.1 (2019-12-10)
 
 * Chore: A bunch of maintenance [Shane Bonham]
