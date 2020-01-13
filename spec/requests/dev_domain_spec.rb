@@ -27,7 +27,7 @@ describe PCO::URL::Engine::DomainMiddleware, type: :request do
       expect(response.body).to eq("http://people.pco.test")
       host! "accounts.pco.codes"
       get "/test"
-      expect(response.body).to eq("http://people.pco.codes")
+      expect(response.body).to eq("http://people.pco.test")
     end
   end
 

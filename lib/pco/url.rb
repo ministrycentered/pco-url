@@ -85,7 +85,9 @@ module PCO
       case env
       when "production", "staging"
         "planningcenteronline.com"
-      when "development", "test"
+      when "test"
+        "pco.test"
+      when "development"
         PCO::URL::Engine.domain || "pco.test"
       end
     end
