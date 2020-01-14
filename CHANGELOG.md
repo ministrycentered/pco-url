@@ -1,3 +1,7 @@
+# v2.1.3 (2020-01-14)
+
+* Chore: no code changes; just bumping the version and rebuilding the gem file with proper file permissions [Tim Morgan]
+
 # v2.1.2 (2020-01-13)
 
 * Fix: Always use pco.test in test environment [Tim Morgan]
