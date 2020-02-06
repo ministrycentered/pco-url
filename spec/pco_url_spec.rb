@@ -3,13 +3,14 @@ require "spec_helper"
 APPLICATIONS = [
   :accounts,
   :avatars,
-  :services,
+  :calendar,
   :check_ins,
+  :get,
+  :giving,
   :people,
   :registrations,
   :resources,
-  :giving,
-  :get
+  :services
 ]
 
 describe PCO::URL do
