@@ -82,13 +82,15 @@ module PCO
     def domain
       return @domain if @domain
 
+      return PCO::URL::Engine.domain if PCO::URL::Engine.domain
+
       case env
       when "production", "staging"
         "planningcenteronline.com"
       when "test"
         "pco.test"
       when "development"
-        PCO::URL::Engine.domain || "pco.test"
+        "pco.test"
       end
     end
 

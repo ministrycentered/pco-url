@@ -1,3 +1,7 @@
+# UNRELEASED
+
+* Feature: add middleware in production/staging to maintain second-level domain, e.g. planningcenter.com when generating URLs
+
 # v2.1.3 (2020-01-14)
 
 * Chore: no code changes; just bumping the version and rebuilding the gem file with proper file permissions [Tim Morgan]

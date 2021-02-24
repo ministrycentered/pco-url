@@ -12,7 +12,7 @@ module PCO
       end
 
       initializer "pco_url.add_middleware" do |app|
-        app.middleware.use PCO::URL::Engine::DomainMiddleware if Rails.env.development? || Rails.env.test?
+        app.middleware.use PCO::URL::Engine::DomainMiddleware
       end
     end
   end
