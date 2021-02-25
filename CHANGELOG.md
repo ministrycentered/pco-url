@@ -1,6 +1,7 @@
 # UNRELEASED
 
 * Feature: add middleware in production/staging to maintain second-level domain, e.g. planningcenter.com when generating URLs
+* Chore: test on more modern versions of Ruby and Rails
 
 # v2.1.3 (2020-01-14)
 
