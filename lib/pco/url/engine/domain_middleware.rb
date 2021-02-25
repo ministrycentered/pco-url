@@ -11,7 +11,8 @@ module PCO
         end
 
         def call(env)
-          PCO::URL::Engine.domain = env["SERVER_NAME"].downcase.match(/[a-z0-9-]+\.[a-z]+$/).to_s
+          domain = env["SERVER_NAME"].downcase.match(/[a-z0-9-]+\.[a-z]+$/).to_s
+          PCO::URL::Engine.domain = PCO::URL::DOMAINS[Rails.env].include?(domain) ? domain : nil
           @app.call(env)
         end
       end

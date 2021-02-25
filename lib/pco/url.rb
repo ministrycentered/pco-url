@@ -7,6 +7,13 @@ require "uri"
 
 module PCO
   class URL
+    DOMAINS = {
+      'development' => %w[pco.test pco.codes],
+      'test' => %w[pco.test pco.codes],
+      'staging' => %w[planningcenteronline.com planningcenter.com],
+      'production' => %w[planningcenteronline.com planningcenter.com],
+    }.freeze
+
     class << self
       def decrypt_query_params(string)
         Encryption.decrypt(string)

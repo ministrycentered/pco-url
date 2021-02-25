@@ -13,6 +13,13 @@ module Dummy
       config.hosts << "accounts.pco.codes"
       config.hosts << "accounts.planningcenteronline.com"
       config.hosts << "accounts.planningcenter.com"
+      config.hosts << "accounts-staging.planningcenteronline.com"
+      config.hosts << "accounts-staging.planningcenter.com"
+
+      # We would obviously never have this in a real Rails app, but we need it here
+      # to test that PCO::URL cannot get tricked by a bad host, should an attacker
+      # somehow sneak one through by some other means.
+      config.hosts << "accounts.evilplanningcenter.com"
     end
     config.secret_key_base = "123abc"
   end
