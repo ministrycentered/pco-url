@@ -7,6 +7,13 @@ require "uri"
 
 module PCO
   class URL
+    DOMAINS = {
+      'development' => %w[pco.test pco.codes],
+      'test' => %w[pco.test pco.codes],
+      'staging' => %w[planningcenteronline.com planningcenter.com],
+      'production' => %w[planningcenteronline.com planningcenter.com],
+    }.freeze
+
     class << self
       def decrypt_query_params(string)
         Encryption.decrypt(string)
@@ -82,13 +89,15 @@ module PCO
     def domain
       return @domain if @domain
 
+      return PCO::URL::Engine.domain if PCO::URL::Engine.domain
+
       case env
       when "production", "staging"
         "planningcenteronline.com"
       when "test"
         "pco.test"
       when "development"
-        PCO::URL::Engine.domain || "pco.test"
+        "pco.test"
       end
     end
 
