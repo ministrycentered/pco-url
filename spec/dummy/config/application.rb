@@ -8,7 +8,12 @@ require "pco/url"
 module Dummy
   class Application < Rails::Application
     config.eager_load = false
-    config.hosts << /accounts\.pco\.(test|codes)/ if Rails::VERSION::MAJOR >= 6
+    if Rails::VERSION::MAJOR >= 6
+      config.hosts << "accounts.pco.test"
+      config.hosts << "accounts.pco.codes"
+      config.hosts << "accounts.planningcenteronline.com"
+      config.hosts << "accounts.planningcenter.com"
+    end
     config.secret_key_base = "123abc"
   end
 end
